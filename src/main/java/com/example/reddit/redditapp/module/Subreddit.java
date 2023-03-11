@@ -28,9 +28,9 @@ public class Subreddit {
     private String name;
     @NotBlank(message = "Description is required")
     private String description;
-    @OneToMany(fetch = LAZY)
+    @OneToMany(fetch = EAGER)
     private List<Post> posts;
     private Instant createdDate;
-    @ManyToOne(fetch = LAZY)
+    @ManyToOne(fetch = EAGER)
     private User user;
 }
