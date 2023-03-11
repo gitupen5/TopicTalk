@@ -2,7 +2,6 @@ package com.example.reddit.redditapp.config;
 
 import com.example.reddit.redditapp.security.JwtAuthenticationFilter;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -38,6 +37,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         .antMatchers("/api/auth/**")
                         .permitAll()
                         .antMatchers(HttpMethod.GET, "/api/subreddit")
+                        .permitAll()
+                        .antMatchers(HttpMethod.GET, "/api/comments")
                         .permitAll()
                         .anyRequest()
                         .authenticated();

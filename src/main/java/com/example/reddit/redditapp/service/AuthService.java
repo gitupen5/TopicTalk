@@ -9,15 +9,19 @@ import com.example.reddit.redditapp.module.User;
 import com.example.reddit.redditapp.module.VerificationToken;
 import com.example.reddit.redditapp.repository.UserRepository;
 import com.example.reddit.redditapp.repository.VerificationTokenRepository;
-import javax.transaction.Transactional;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.reddit.redditapp.security.JwtProvider;
+
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -52,6 +56,23 @@ public class AuthService {
                 "please click on the below url to activate your account : " +
                 "http://localhost:8080/api/auth/accountVerification/" + token));
     }
+
+//    @Transactional(readOnly = true)
+//    public User getCurrentUser() {
+//        Jwt principal = (Jwt) SecurityContextHolder.
+//                getContext().getAuthentication().getPrincipal();
+//        return userRepository.findByUsername(principal.getSubject())
+//                .orElseThrow(() -> new UsernameNotFoundException("User name not found - " + principal.getSubject()));
+//    }
+    @Transactional(readOnly = true)
+    public User getCurrentUser() {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getPrincipal();
+        return userRepository.findByUsername(userDetails.getUsername())
+                .orElseThrow(() -> new UsernameNotFoundException("User name not found - " + userDetails.getUsername()));
+    }
     private String generateVerificationToken(User user) {
         String token = UUID.randomUUID().toString();
         VerificationToken verificationToken = new VerificationToken();
@@ -80,4 +101,5 @@ public class AuthService {
         String token = jwtProvider.generateToken(authenticate);
         return new AuthenticationResponse(token, loginRequest.getUsername());
     }
+
 }

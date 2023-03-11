@@ -19,7 +19,7 @@ public interface SubredditMapper {
         return numberOfPosts.size();
     }
 
-    @InheritInverseConfiguration
+    @InheritInverseConfiguration  //will create mapping simillar to mapsubreddittoDto method
     @Mapping(target = "posts", ignore = true)
     Subreddit mapDtoToSubreddit(SubredditDto subredditDto);
 }
