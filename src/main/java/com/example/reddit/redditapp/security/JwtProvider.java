@@ -49,14 +49,14 @@ public class JwtProvider {
                 .compact();
     }
 
-//    public String generateTokenWithUserName(String username) {
-//        return Jwts.builder()
-//                .setSubject(username)
-//                .setIssuedAt(from(Instant.now()))
-//                .signWith(getPrivateKey())
-//                .setExpiration(Date.from(Instant.now().plusMillis(jwtExpirationInMillis)))
-//                .compact();
-//    }
+    public String generateTokenWithUserName(String username) {
+        return Jwts.builder()
+                .setSubject(username)
+                .setIssuedAt(from(Instant.now()))
+                .signWith(getPrivateKey())
+                .setExpiration(Date.from(Instant.now().plusMillis(jwtExpirationInMillis)))
+                .compact();
+    }
 
     private PrivateKey getPrivateKey() {
         try {
